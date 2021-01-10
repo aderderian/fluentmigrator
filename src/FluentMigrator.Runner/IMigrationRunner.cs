@@ -77,6 +77,8 @@ namespace FluentMigrator.Runner
         /// <param name="version">The target version to migrate to (inclusive)</param>
         void MigrateUp(long version);
 
+        void DynamicMigrateUp(IDynamicMigration migration, bool useAutomaticTransactionManagement);
+
         /// <summary>
         /// Rollback the given number of steps
         /// </summary>

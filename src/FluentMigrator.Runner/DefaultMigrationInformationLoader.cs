@@ -146,6 +146,32 @@ namespace FluentMigrator.Runner
             return _migrationInfos;
         }
 
+        public SortedList<long, IMigrationInfo> LoadDynamicMigrations()
+        {
+            _migrationInfos = new SortedList<long, IMigrationInfo>();
+            var migrationInfos = FindMigrations(
+                _source,
+                Conventions,
+                Namespace,
+                LoadNestedNamespaces,
+                _tagsToMatch,
+                _includeUntaggedMigrations);
+            foreach (var migrationInfo in migrationInfos)
+            {
+                if (_migrationInfos.ContainsKey(migrationInfo.Version))
+                {
+                    throw new DuplicateMigrationException($"Duplicate migration version {migrationInfo.Version}.");
+                }
+
+                _migrationInfos.Add(migrationInfo.Version, migrationInfo);
+            }
+
+            if (_migrationInfos.Count == 0)
+                throw new MissingMigrationsException();
+
+            return _migrationInfos;
+        }
+
         [NotNull, ItemNotNull]
         private static IEnumerable<IMigrationInfo> FindMigrations(
 #pragma warning disable 618
@@ -163,6 +189,7 @@ namespace FluentMigrator.Runner
                     return false;
                 if (!conventions.TypeIsMigration(type))
                     return false;
+
                 return conventions.HasRequestedTags(type, tagsToMatch, includeUntagged);
             }
 

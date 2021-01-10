@@ -28,6 +28,8 @@ namespace FluentMigrator.Runner
     {
         private static readonly IMigrationRunnerConventions _default = DefaultMigrationRunnerConventions.Instance;
 
+        public Func<Type, bool> TypeIsDynamicMigration { get; set; }
+
         public Func<Type, bool> TypeIsMigration { get; set; }
         public Func<Type, bool> TypeIsProfile { get; set; }
         public Func<Type, MigrationStage?> GetMaintenanceStage { get; set; }

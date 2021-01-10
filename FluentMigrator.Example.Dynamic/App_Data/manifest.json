@@ -1,0 +1,15 @@
+{
+  "tables": [
+    {
+      "name": "TestTable",
+      "schema": {
+        "columns": [
+          {
+            "name": "Id",
+            "type": "int"
+          }
+        ]
+      }
+    }
+  ]
+}

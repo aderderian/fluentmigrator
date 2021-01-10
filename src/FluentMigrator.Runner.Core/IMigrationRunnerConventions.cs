@@ -25,6 +25,8 @@ namespace FluentMigrator.Runner
 {
     public interface IMigrationRunnerConventions
     {
+        Func<Type, bool> TypeIsDynamicMigration { get; }
+
         Func<Type, bool> TypeIsMigration { get; }
 
         Func<Type, bool> TypeIsProfile { get; }

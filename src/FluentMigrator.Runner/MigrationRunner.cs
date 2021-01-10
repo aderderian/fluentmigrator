@@ -449,6 +449,46 @@ namespace FluentMigrator.Runner
             VersionLoader.LoadVersionInfo();
         }
 
+        /// <summary>
+        /// Apply migrations up to the given <paramref name="targetVersion"/>
+        /// </summary>
+        /// <param name="targetVersion">The target migration version</param>
+        /// <param name="useAutomaticTransactionManagement"><c>true</c> if automatic transaction management should be used</param>
+        public void DynamicMigrateUp(IDynamicMigration migration, bool useAutomaticTransactionManagement)
+        {
+            using (IMigrationScope scope = _migrationScopeManager.CreateOrWrapMigrationScope(useAutomaticTransactionManagement && TransactionPerSession))
+            {
+                try
+                {
+                    ApplyMaintenance(MigrationStage.BeforeAll, useAutomaticTransactionManagement);
+
+                    ApplyMaintenance(MigrationStage.BeforeEach, useAutomaticTransactionManagement);
+                    ApplyDynamicMigrationUp(migration, useAutomaticTransactionManagement);
+                    ApplyMaintenance(MigrationStage.AfterEach, useAutomaticTransactionManagement);
+
+                    ApplyMaintenance(MigrationStage.BeforeProfiles, useAutomaticTransactionManagement);
+
+                    ApplyProfiles();
+
+                    ApplyMaintenance(MigrationStage.AfterAll, useAutomaticTransactionManagement);
+
+                    scope.Complete();
+                }
+                catch
+                {
+                    if (scope.IsActive)
+                    {
+                        scope.Cancel();  // SQLAnywhere needs explicit call to rollback transaction
+                    }
+
+                    throw;
+                }
+            }
+
+            VersionLoader.LoadVersionInfo();
+        }
+
+
         private IEnumerable<IMigrationInfo> GetUpMigrationsToApply(long version)
         {
             var migrations = MigrationLoader.LoadMigrations();
@@ -566,6 +606,69 @@ namespace FluentMigrator.Runner
             return VersionLoader.VersionInfo.AppliedMigrations().Any();
         }
 
+        
+        public virtual void ApplyDynamicMigrationUp([NotNull] IDynamicMigration migration, bool useTransaction)
+        {
+            if (migration == null)
+            {
+                throw new ArgumentNullException(nameof(migration));
+            }
+
+            if (!_alreadyOutputPreviewOnlyModeWarning && _processorOptions.PreviewOnly)
+            {
+                _logger.LogHeader("PREVIEW-ONLY MODE");
+                _alreadyOutputPreviewOnlyModeWarning = true;
+            }
+
+            if (!VersionLoader.VersionInfo.HasAppliedMigration(migration.Version))
+            {
+                var name = migration.GetName();
+                _logger.LogHeader($"{name} migrating");
+
+                _stopWatch.Start();
+
+                using (var scope = _migrationScopeManager.CreateOrWrapMigrationScope(useTransaction))
+                {
+                    try
+                    {
+                        /*
+                        if (migrationInfo.IsAttributed() && migrationInfo.IsBreakingChange &&
+                            !_processorOptions.PreviewOnly && !AllowBreakingChanges)
+                        {
+                            throw new InvalidOperationException(
+                                string.Format(
+                                    "The migration {0} is identified as a breaking change, and will not be executed unless the necessary flag (allow-breaking-changes|abc) is passed to the runner.",
+                                    migrationInfo.GetName()));
+                        }
+                        */
+
+                        ExecuteDynamicMigration(migration, (m, c) => m.GetDynamicUpExpressions(c, m.UpMethod));
+
+                        if(true)
+                        //if (migrationInfo.IsAttributed())
+                        {
+                            VersionLoader.UpdateVersionInfo(migration.Version, migration.Description);
+                        }
+
+                        scope.Complete();
+                    }
+                    catch
+                    {
+                        if (useTransaction && scope.IsActive)
+                        {
+                            scope.Cancel();  // SQLAnywhere needs explicit call to rollback transaction
+                        }
+
+                        throw;
+                    }
+
+                    _stopWatch.Stop();
+
+                    _logger.LogSay($"{name} migrated");
+                    _logger.LogElapsedTime(_stopWatch.ElapsedTime());
+                }
+            }
+        }
         /// <summary>
         /// Apply the migration using the given migration information
         /// </summary>
@@ -628,6 +731,55 @@ namespace FluentMigrator.Runner
                     _logger.LogSay($"{name} migrated");
                     _logger.LogElapsedTime(_stopWatch.ElapsedTime());
                 }
+            }
+        }
+
+        public virtual void ApplyDynamicMigrationDown([NotNull] IDynamicMigration migration, bool useTransaction)
+        {
+            if (migration == null)
+            {
+                throw new ArgumentNullException(nameof(migration));
+            }
+
+            if (!_alreadyOutputPreviewOnlyModeWarning && _processorOptions.PreviewOnly)
+            {
+                _logger.LogHeader("PREVIEW-ONLY MODE");
+                _alreadyOutputPreviewOnlyModeWarning = true;
+            }
+
+            var name = migration.GetName();
+            _logger.LogHeader($"{name} reverting");
+
+            _stopWatch.Start();
+
+            using (var scope = _migrationScopeManager.CreateOrWrapMigrationScope(useTransaction))
+            {
+                try
+                {
+                    ExecuteDynamicMigration(migration, (m, c) => m.GetDynamicDownExpressions(c, m.DownMethod));
+                    /*
+                    if (migrationInfo.IsAttributed())
+                    {
+                        VersionLoader.DeleteVersion(migration.Version);
+                    }
+                    */
+
+                    scope.Complete();
+                }
+                catch
+                {
+                    if (useTransaction && scope.IsActive)
+                    {
+                        scope.Cancel();  // SQLAnywhere needs explicit call to rollback transaction
+                    }
+
+                    throw;
+                }
+
+                _stopWatch.Stop();
+
+                _logger.LogSay($"{name} reverted");
+                _logger.LogElapsedTime(_stopWatch.ElapsedTime());
             }
         }
 
@@ -806,6 +958,36 @@ namespace FluentMigrator.Runner
             var migrationInfoAdapter = new NonAttributedMigrationToMigrationInfoAdapter(migration);
 
             ApplyMigrationUp(migrationInfoAdapter, true);
+        }
+
+        private void ExecuteDynamicMigration(IDynamicMigration migration, Action<IDynamicMigration, IMigrationContext> getExpressions)
+        {
+            _caughtExceptions = new List<Exception>();
+
+            MigrationContext context;
+
+            if (_serviceProvider == null)
+            {
+#pragma warning disable 612
+                context = new MigrationContext(Processor, _migrationAssemblies, RunnerContext?.ApplicationContext, Processor.ConnectionString);
+#pragma warning restore 612
+            }
+            else
+            {
+                var connectionStringAccessor = _serviceProvider.GetRequiredService<IConnectionStringAccessor>();
+                context = new MigrationContext(
+                    Processor,
+                    _serviceProvider,
+#pragma warning disable 612
+                    _options?.ApplicationContext ?? RunnerContext?.ApplicationContext,
+#pragma warning restore 612
+                    connectionStringAccessor.ConnectionString);
+            }
+
+            getExpressions(migration, context);
+
+            _migrationValidator.ApplyConventionsToAndValidateExpressions((IMigration)migration, context.Expressions);
+            ExecuteExpressions(context.Expressions);
         }
 
         private void ExecuteMigration(IMigration migration, Action<IMigration, IMigrationContext> getExpressions)
