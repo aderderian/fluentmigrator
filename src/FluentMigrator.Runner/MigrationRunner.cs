@@ -37,6 +37,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using FluentMigrator.Runner.Constraints;
+using FluentMigrator.Runner.Versioning;
 
 namespace FluentMigrator.Runner
 {
@@ -1091,6 +1092,11 @@ namespace FluentMigrator.Runner
         }
 
         /// <inheritdoc />
+        public IVersionInfo GetCurrentVersionInfo()
+        {
+            return VersionLoader.VersionInfo;
+        }
+            /// <inheritdoc />
         public void ListMigrations()
         {
             var currentVersionInfo = VersionLoader.VersionInfo;

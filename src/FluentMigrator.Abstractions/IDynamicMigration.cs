@@ -40,5 +40,6 @@ namespace FluentMigrator
         void GetDynamicUpExpressions(IMigrationContext context, Action upMethod);
 
         void GetDynamicDownExpressions(IMigrationContext context, Action downMethod);
+
     }
 }

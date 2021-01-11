@@ -34,7 +34,6 @@ namespace FluentMigrator.Runner.Infrastructure
 
         public static DefaultMigrationRunnerConventions Instance { get; } = new DefaultMigrationRunnerConventions();
 
-        public Func<Type, bool> TypeIsDynamicMigration => TypeIsDynamicMigrationImpl;
         public Func<Type, bool> TypeIsMigration => TypeIsMigrationImpl;
         public Func<Type, bool> TypeIsProfile => TypeIsProfileImpl;
         public Func<Type, MigrationStage?> GetMaintenanceStage => GetMaintenanceStageImpl;
@@ -52,11 +51,6 @@ namespace FluentMigrator.Runner.Infrastructure
         private static bool TypeIsMigrationImpl(Type type)
         {
             return typeof(IMigration).IsAssignableFrom(type) && type.GetCustomAttributes<MigrationAttribute>().Any();
-        }
-
-        private static bool TypeIsDynamicMigrationImpl(Type type)
-        {
-            return typeof(IDynamicMigration).IsAssignableFrom(type);
         }
 
         private static MigrationStage? GetMaintenanceStageImpl(Type type)

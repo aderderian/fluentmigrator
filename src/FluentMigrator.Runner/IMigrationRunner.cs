@@ -18,6 +18,7 @@ using System;
 
 using FluentMigrator.Infrastructure;
 using FluentMigrator.Runner.Initialization;
+using FluentMigrator.Runner.Versioning;
 
 using JetBrains.Annotations;
 
@@ -109,6 +110,12 @@ namespace FluentMigrator.Runner
         /// List all migrations to the logger
         /// </summary>
         void ListMigrations();
+
+        /// <summary>
+        /// Return the current version info in the system.
+        /// </summary>
+        /// <returns></returns>
+        IVersionInfo GetCurrentVersionInfo();
 
         /// <summary>
         /// Returns <c>true</c> when there are migrations to apply

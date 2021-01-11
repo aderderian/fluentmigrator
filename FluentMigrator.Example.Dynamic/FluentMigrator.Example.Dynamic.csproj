@@ -32,6 +32,6 @@
     </Resource>
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties app_3data_4manifest_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>
