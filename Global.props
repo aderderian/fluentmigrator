@@ -3,7 +3,7 @@
   <Import Project="DotNetSdkMono.props" />
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <VersionPrefix>1.0.2</VersionPrefix>
+    <VersionPrefix>1.0.0</VersionPrefix>
     <Product>DCW FluentMigrator</Product>
     <Copyright>Sean Chambers and the FluentMigrator project 2008-2018</Copyright>
     <Company>DCW FluentMigrator Project</Company>

@@ -6,8 +6,8 @@
     <PackageTags>fluent;migrator;fluentmigrator;migration;database</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\FluentMigrator.snk</AssemblyOriginatorKeyFile>
-    <PackageId>DCW.FluentMigrator.Runner.SqlAnywhere</PackageId>
-    <AssemblyName>DCW.FluentMigrator.Runner.SqlAnywhere</AssemblyName>
+    <PackageId>FluentMigrator.Runner.SqlAnywhere</PackageId>
+    <AssemblyName>FluentMigrator.Runner.SqlAnywhere</AssemblyName>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)../../PackageLibrary.props" />
   <ItemGroup>

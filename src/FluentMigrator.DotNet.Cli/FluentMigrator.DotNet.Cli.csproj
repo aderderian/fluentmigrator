@@ -5,8 +5,8 @@
     <PackAsTool>true</PackAsTool>
     <OutputType>Exe</OutputType>
     <Description>.NET Core CLI tool for FluentMigrator</Description>
-    <PackageId>DCW.FluentMigrator.DotNet.Cli</PackageId>
-    <AssemblyName>DCW.FluentMigrator.DotNet.Cli</AssemblyName>
+    <PackageId>FluentMigrator.DotNet.Cli</PackageId>
+    <AssemblyName>FluentMigrator.DotNet.Cli</AssemblyName>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)../../PackageTool.props" />
   <ItemGroup>

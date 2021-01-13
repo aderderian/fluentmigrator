@@ -13,8 +13,8 @@
     <PackageTags>fluent;migrator;fluentmigrator;migration;database</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\FluentMigrator.snk</AssemblyOriginatorKeyFile>
-    <PackageId>DCW.FluentMigrator.Abstractions</PackageId>
-    <AssemblyName>DCW.FluentMigrator.Abstractions</AssemblyName>
+    <PackageId>FluentMigrator.Abstractions</PackageId>
+    <AssemblyName>FluentMigrator.Abstractions</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <noWarn>1591</noWarn>

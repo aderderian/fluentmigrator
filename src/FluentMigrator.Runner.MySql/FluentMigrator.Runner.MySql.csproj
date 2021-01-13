@@ -6,8 +6,8 @@
     <PackageTags>fluent;migrator;fluentmigrator;migration;database</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\FluentMigrator.snk</AssemblyOriginatorKeyFile>
-    <PackageId>DCW.FluentMigrator.Runner.MySql</PackageId>
-    <AssemblyName>DCW.FluentMigrator.Runner.MySql</AssemblyName>
+    <PackageId>FluentMigrator.Runner.MySql</PackageId>
+    <AssemblyName>FluentMigrator.Runner.MySql</AssemblyName>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)../../PackageLibrary.props" />
   <ItemGroup>

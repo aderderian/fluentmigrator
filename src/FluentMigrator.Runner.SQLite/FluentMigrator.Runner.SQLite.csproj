@@ -6,8 +6,8 @@
     <PackageTags>fluent;migrator;fluentmigrator;migration;database</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\FluentMigrator.snk</AssemblyOriginatorKeyFile>
-    <PackageId>DCW.FluentMigrator.Runner.SQLite</PackageId>
-    <AssemblyName>DCW.FluentMigrator.Runner.SQLite</AssemblyName>
+    <PackageId>FluentMigrator.Runner.SQLite</PackageId>
+    <AssemblyName>FluentMigrator.Runner.SQLite</AssemblyName>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)../../PackageLibrary.props" />
   <ItemGroup>

@@ -2,8 +2,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net461</TargetFrameworks>
-    <AssemblyName>DCW.Migrate</AssemblyName>
-    <PackageId>DCW.FluentMigrator.Console</PackageId>
+    <AssemblyName>Migrate</AssemblyName>
+    <PackageId>FluentMigrator.Console</PackageId>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\FluentMigrator.snk</AssemblyOriginatorKeyFile>
     <Description>Console runner for FluentMigrator</Description>

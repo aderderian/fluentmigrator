@@ -6,8 +6,8 @@
     <PackageTags>fluent;migrator;fluentmigrator;migration;database</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\FluentMigrator.snk</AssemblyOriginatorKeyFile>
-    <PackageId>DCW.FluentMigrator.Runner.Oracle</PackageId>
-    <AssemblyName>DCW.FluentMigrator.Runner.Oracle</AssemblyName>
+    <PackageId>FluentMigrator.Runner.Oracle</PackageId>
+    <AssemblyName>FluentMigrator.Runner.Oracle</AssemblyName>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)../../PackageLibrary.props" />
   <ItemGroup>

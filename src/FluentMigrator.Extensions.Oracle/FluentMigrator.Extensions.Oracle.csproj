@@ -6,8 +6,8 @@
     <PackageTags>fluent;migrator;fluentmigrator;migration;database</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\FluentMigrator.snk</AssemblyOriginatorKeyFile>
-    <PackageId>DCW.FluentMigrator.Extensions.Oracle</PackageId>
-    <AssemblyName>DCW.FluentMigrator.Extensions.Oracle</AssemblyName>
+    <PackageId>FluentMigrator.Extensions.Oracle</PackageId>
+    <AssemblyName>FluentMigrator.Extensions.Oracle</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <noWarn>1591</noWarn>
