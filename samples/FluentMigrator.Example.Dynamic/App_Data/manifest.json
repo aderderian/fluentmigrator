@@ -1,0 +1,33 @@
+{
+  "migrations": [
+    {
+      "version": 1,
+      "description": "Initial Migration for tests.",
+      "isBreakingChange": false,
+      "tables": [
+        {
+          "name": "TestTable",
+          "columns": [
+            {
+              "name": "Id",
+              "type": "Int32",
+              "isPrimaryKey": true,
+              "isIdentity": true,
+              "isNullable": false
+            },
+            {
+              "name": "Description",
+              "type": "String",
+              "isNullable": false
+            },
+            {
+              "name": "ModifiedDate",
+              "type": "DateTime",
+              "isNullable": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

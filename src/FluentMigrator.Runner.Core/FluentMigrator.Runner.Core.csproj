@@ -5,6 +5,8 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\FluentMigrator.snk</AssemblyOriginatorKeyFile>
     <RootNamespace>FluentMigrator.Runner</RootNamespace>
+    <PackageId>DCW.FluentMigrator.Runner.Core</PackageId>
+    <AssemblyName>DCW.FluentMigrator.Runner.Core</AssemblyName>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)../../PackageLibrary.props" />
   <ItemGroup>

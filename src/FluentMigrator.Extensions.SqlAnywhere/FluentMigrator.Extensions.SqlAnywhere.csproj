@@ -6,6 +6,8 @@
     <PackageTags>fluent;migrator;fluentmigrator;migration;database</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\FluentMigrator.snk</AssemblyOriginatorKeyFile>
+    <PackageId>DCW.FluentMigrator.Extensions.SqlAnywhere</PackageId>
+    <AssemblyName>DCW.FluentMigrator.Extensions.SqlAnywhere</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <noWarn>1591</noWarn>

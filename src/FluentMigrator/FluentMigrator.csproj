@@ -6,6 +6,12 @@
     <PackageTags>fluent;migrator;fluentmigrator;migration;database</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\FluentMigrator.snk</AssemblyOriginatorKeyFile>
+    <Version>1.0.2</Version>
+    <PackageId>DCW.FluentMigrator</PackageId>
+    <Product>DCW FluentMigrator</Product>
+    <Company>DCW FluentMigrator Project</Company>
+    <RepositoryUrl>https://github.com/aderderian/fluentmigrator.git</RepositoryUrl>
+    <AssemblyName>DCW.FluentMigrator</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <noWarn>1591</noWarn>

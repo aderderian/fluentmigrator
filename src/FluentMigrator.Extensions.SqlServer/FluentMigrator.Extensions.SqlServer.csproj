@@ -6,6 +6,8 @@
     <PackageTags>fluent;migrator;fluentmigrator;migration;database</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\FluentMigrator.snk</AssemblyOriginatorKeyFile>
+    <PackageId>FluentMigrator.Extensions.SqlServer</PackageId>
+    <AssemblyName>DCW.FluentMigrator.Extensions.SqlServer</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <noWarn>1591</noWarn>
