@@ -14,6 +14,12 @@
 // limitations under the License.
 #endregion
 
+using System.Collections.Generic;
+
+using FluentMigrator.Expressions;
+using FluentMigrator.Infrastructure.Extensions;
+using FluentMigrator.Postgres;
+
 using JetBrains.Annotations;
 
 using Microsoft.Extensions.Options;
@@ -35,6 +41,43 @@ namespace FluentMigrator.Runner.Generators.Postgres
         protected Postgres10_0Generator([NotNull] PostgresQuoter quoter, [NotNull] IOptions<GeneratorOptions> generatorOptions, [NotNull] ITypeMap typeMap)
             : base(new Postgres10_0Column(quoter, typeMap), quoter, generatorOptions)
         {
+        }
+
+        protected Postgres10_0Generator(
+            [NotNull] IColumn column,
+            [NotNull] PostgresQuoter quoter,
+            [NotNull] IOptions<GeneratorOptions> generatorOptions)
+            : base(column, quoter, generatorOptions)
+        {
+        }
+
+        /// <inheritdoc />
+        protected override HashSet<string> GetAllowIndexStorageParameters()
+        {
+            var allow = base.GetAllowIndexStorageParameters();
+
+            allow.Add(PostgresExtensions.IndexBuffering);
+            allow.Add(PostgresExtensions.IndexGinPendingListLimit);
+            allow.Add(PostgresExtensions.IndexPagesPerRange);
+            allow.Add(PostgresExtensions.IndexAutosummarize);
+
+            return allow;
+        }
+
+        /// <inheritdoc />
+        protected override string GetOverridingIdentityValuesString(InsertDataExpression expression)
+        {
+            if (!expression.AdditionalFeatures.ContainsKey(PostgresExtensions.OverridingIdentityValues))
+            {
+                return string.Empty;
+            }
+
+            var overridingIdentityValues =
+                expression.GetAdditionalFeature<PostgresOverridingIdentityValuesType>(
+                    PostgresExtensions.OverridingIdentityValues);
+
+            return string.Format(" OVERRIDING {0} VALUE",
+                overridingIdentityValues == PostgresOverridingIdentityValuesType.User ? "USER" : "SYSTEM");
         }
     }
 }

@@ -1,5 +1,5 @@
-#region License
-// Copyright (c) 2007-2018, FluentMigrator Project
+﻿#region License
+// Copyright (c) 2021, FluentMigrator Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,21 +14,17 @@
 // limitations under the License.
 #endregion
 
-using System;
+using FluentMigrator.Runner.Generators.Postgres;
+using FluentMigrator.Tests.Unit.Generators.Postgres10_0;
 
-using FluentMigrator.Infrastructure.Extensions;
-using FluentMigrator.Model;
-using FluentMigrator.Postgres;
-
-namespace FluentMigrator.Runner.Generators.Postgres
+namespace FluentMigrator.Tests.Unit.Generators.Postgres11_0
 {
-    class Postgres11_0Column : Postgres10_0Column
+    public class Postgres11_0DataTests : Postgres10_0DataTests
     {
-        public Postgres11_0Column(PostgresQuoter quoter, ITypeMap typeMap)
-            : base(quoter, typeMap)
+        /// <inheritdoc />
+        protected override PostgresGenerator CreateGenerator(PostgresQuoter quoter)
         {
-
+            return new Postgres11_0Generator(quoter);
         }
-
     }
 }
