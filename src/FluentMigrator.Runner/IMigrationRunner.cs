@@ -80,6 +80,8 @@ namespace FluentMigrator.Runner
 
         void DynamicMigrateUp(IDynamicMigration migration, bool useAutomaticTransactionManagement);
 
+        void DynamicMigrateDown(IDynamicMigration migration, bool useAutomaticTransactionManagement);
+
         /// <summary>
         /// Rollback the given number of steps
         /// </summary>

@@ -37,6 +37,7 @@ using FluentMigrator.Runner.Processors.SqlAnywhere;
 using FluentMigrator.Runner.Processors.SQLite;
 using FluentMigrator.Runner.Processors.SqlServer;
 using FluentMigrator.SqlAnywhere;
+using FluentMigrator.Tests.Helpers;
 using FluentMigrator.Tests.Integration.Migrations.Tagged;
 using FluentMigrator.Tests.Unit;
 
@@ -56,6 +57,65 @@ namespace FluentMigrator.Tests.Integration
     public class MigrationRunnerTests : IntegrationTestBase
     {
         private const string RootNamespace = "FluentMigrator.Tests.Integration.Migrations";
+
+        [Test]
+        [Category("Firebird")]
+        [Category("MySql")]
+        [Category("SQLite")]
+        [Category("Postgres")]
+        [Category("SqlServer2005")]
+        [Category("SqlServer2008")]
+        [Category("SqlServer2012")]
+        [Category("SqlServer2014")]
+        [Category("SqlServer2016")]
+        [Category("SqlAnywhere16")]
+        public void CanCreateDynamicTableMigration()
+        {
+            ExecuteWithSupportedProcessors(
+                init => init.WithMigrationsIn(RootNamespace),
+                (serviceProvider, processor) =>
+                {
+                    var parentTableName = "DynamicTableParent";
+                    var childTableName = "DynamicTableChild";
+                    var migration = new DynamicMigrationFactory(parentTableName, childTableName);
+                    var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
+
+                    runner.DynamicMigrateUp(migration, true);
+
+                    processor.TableExists(null, parentTableName).ShouldBeTrue();
+                    processor.TableExists(null, childTableName).ShouldBeTrue();
+                });
+        }
+
+        [Test]
+        [Category("Firebird")]
+        [Category("MySql")]
+        [Category("SQLite")]
+        [Category("Postgres")]
+        [Category("SqlServer2005")]
+        [Category("SqlServer2008")]
+        [Category("SqlServer2012")]
+        [Category("SqlServer2014")]
+        [Category("SqlServer2016")]
+        [Category("SqlAnywhere16")]
+        public void CanDropDynamicTableMigration()
+        {
+            ExecuteWithSupportedProcessors(
+                init => init.WithMigrationsIn(RootNamespace),
+                (serviceProvider, processor) =>
+                {
+                    var parentTableName = "DynamicTableParent";
+                    var childTableName = "DynamicTableChild";
+                    var migration = new DynamicMigrationFactory(parentTableName, childTableName);
+                    var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
+
+                    runner.DynamicMigrateUp(migration, true);
+                    runner.DynamicMigrateDown(migration, true);
+
+                    processor.TableExists(null, parentTableName).ShouldBe(false);
+                    processor.TableExists(null, childTableName).ShouldBe(false);
+                });
+        }
 
         [Test]
         [Category("Firebird")]

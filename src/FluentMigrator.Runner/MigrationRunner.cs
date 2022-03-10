@@ -489,6 +489,40 @@ namespace FluentMigrator.Runner
             VersionLoader.LoadVersionInfo();
         }
 
+        public void DynamicMigrateDown(IDynamicMigration migration, bool useAutomaticTransactionManagement)
+        {
+            using (IMigrationScope scope = _migrationScopeManager.CreateOrWrapMigrationScope(useAutomaticTransactionManagement && TransactionPerSession))
+            {
+                try
+                {
+                    ApplyMaintenance(MigrationStage.BeforeAll, useAutomaticTransactionManagement);
+
+                    ApplyMaintenance(MigrationStage.BeforeEach, useAutomaticTransactionManagement);
+                    ApplyDynamicMigrationDown(migration, useAutomaticTransactionManagement);
+                    ApplyMaintenance(MigrationStage.AfterEach, useAutomaticTransactionManagement);
+
+                    ApplyMaintenance(MigrationStage.BeforeProfiles, useAutomaticTransactionManagement);
+
+                    ApplyProfiles();
+
+                    ApplyMaintenance(MigrationStage.AfterAll, useAutomaticTransactionManagement);
+
+                    scope.Complete();
+                }
+                catch
+                {
+                    if (scope.IsActive)
+                    {
+                        scope.Cancel();  // SQLAnywhere needs explicit call to rollback transaction
+                    }
+
+                    throw;
+                }
+            }
+
+            VersionLoader.LoadVersionInfo();
+        }
+
 
         private IEnumerable<IMigrationInfo> GetUpMigrationsToApply(long version)
         {
